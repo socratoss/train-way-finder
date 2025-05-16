@@ -1,47 +1,50 @@
 from django import forms
+
 from cities.models import City
+
 from routes.models import Route
+
 from trains.models import Train
 
 
 class RouteForm(forms.Form):
     from_city = forms.ModelChoiceField(
-        label='From',
+        label="From",
         queryset=City.objects.all(),
         widget=forms.Select(attrs={
-            'class': 'form-control js-example-basic-single'
+            "class": "form-control js-example-basic-single"
         })
     )
     to_city = forms.ModelChoiceField(
-        label='To',
+        label="To",
         queryset=City.objects.all(),
         widget=forms.Select(attrs={
-            'class': 'form-control js-example-basic-single'
+            "class": "form-control js-example-basic-single"
         })
     )
     cities = forms.ModelMultipleChoiceField(
-        label='Through the cities',
+        label="Through the cities",
         queryset=City.objects.all(),
         required=False,
         widget=forms.SelectMultiple(attrs={
-            'class': 'form-control js-example-basic-multiple'
+            "class": "form-control js-example-basic-multiple"
         })
     )
     travelling_time = forms.IntegerField(
-        label='Travel Time',
+        label="Travel Time",
         widget=forms.NumberInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Enter travel time'
+            "class": "form-control",
+            "placeholder": "Enter travel time"
         })
     )
 
 
 class RouteModelForm(forms.ModelForm):
     name = forms.CharField(
-        label='Name route',
+        label="Name route",
         widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Enter route name'
+            "class": "form-control",
+            "placeholder": "Enter route name"
         })
     )
     from_city = forms.ModelChoiceField(
@@ -56,7 +59,7 @@ class RouteModelForm(forms.ModelForm):
         queryset=Train.objects.all(),
         required=False,
         widget=forms.SelectMultiple(attrs={
-            'class': 'form-control d-none'
+            "class": "form-control d-none"
         })
     )
     travel_times = forms.IntegerField(
@@ -65,4 +68,4 @@ class RouteModelForm(forms.ModelForm):
 
     class Meta:
         model = Route
-        fields = '__all__'
+        fields = "__all__"

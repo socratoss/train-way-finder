@@ -22,14 +22,14 @@ def get_graph(qs):
 
 
 def get_routes(request, form) -> dict:
-    context = {'form': form}
-    qs = Train.objects.all().select_related('from_city', 'to_city')
+    context = {"form": form}
+    qs = Train.objects.all().select_related("from_city", "to_city")
     graph = get_graph(qs)
     data = form.cleaned_data
-    from_city = data['from_city']
-    to_city = data['to_city']
-    cities = data['cities']
-    travelling_time = data['travelling_time']
+    from_city = data["from_city"]
+    to_city = data["to_city"]
+    cities = data["cities"]
+    travelling_time = data["travelling_time"]
     all_ways = list(dfs_path(graph, from_city.id, to_city.id))
     if not len(all_ways):
         raise ValueError("No routes found")
@@ -50,14 +50,14 @@ def get_routes(request, form) -> dict:
         all_trains[(q.from_city_id, q.to_city_id)].append(q)
     for route in right_ways:
         tmp = {}
-        tmp['trains'] = []
+        tmp["trains"] = []
         total_time = 0
-        for i in range(len(route) -1):
-            qs = all_trains[(route[i], route[i+1])]
+        for i in range(len(route) - 1):
+            qs = all_trains[(route[i], route[i + 1])]
             q = qs[0]
             total_time += q.travel_time
-            tmp['trains'].append(q)
-        tmp['total_time'] = total_time
+            tmp["trains"].append(q)
+        tmp["total_time"] = total_time
         if total_time <= travelling_time:
             routes.append(tmp)
     if not routes:
@@ -66,12 +66,12 @@ def get_routes(request, form) -> dict:
     if len(routes) == 1:
         sorted_routes = routes
     else:
-        times = list(set(r['total_time'] for r in routes))
+        times = list(set(r["total_time"] for r in routes))
         times = sorted(times)
         for time in times:
             for route in routes:
-                if time == route['total_time']:
+                if time == route["total_time"]:
                     sorted_routes.append(route)
-    context['routes'] = sorted_routes
-    context['cities'] = {'from_city': from_city, 'to_city': to_city}
+    context["routes"] = sorted_routes
+    context["cities"] = {"from_city": from_city, "to_city": to_city}
     return context
